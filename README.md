@@ -1,4 +1,4 @@
-EasyBulkMailer
+# EasyBulkMailer
 
 EasyBulkMailer is an easy-to-configure bulk mailer for single-user usage on a client.
 
@@ -16,6 +16,7 @@ This is just a first attempt, only the "mailing engine" is more or less implemen
 for configuration and start and watch the mailing process, logging, error handling etc.
 
 You will need a Java runtime environment (at least version 7) (free downloadable from here: http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
 You will also need the JavaMail API (free downloadable from here: http://www.oracle.com/technetwork/java/javamail/index.html).
 
 A more detailed usage instruction will follow...

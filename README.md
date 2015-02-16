@@ -19,4 +19,6 @@ You will need a Java runtime environment (at least version 8) (free downloadable
 
 You will also need the JavaMail API (free downloadable from here: http://www.oracle.com/technetwork/java/javamail/index.html).
 
+Finally you will need Card Me (free downloadable from here: http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi).
+
 A more detailed usage instruction will follow...

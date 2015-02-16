@@ -24,9 +24,9 @@ class DefaultMailingEngine implements MailingEngine {
         //TODO use loggin mechanism instead System.outs
         MailServerConfiguration conf = new MailServerConfiguration();
         System.out.println("Use mail configuration:\n" + conf);
-//      List<InternetAddress> receipients = VCardImporter.importReceipients(job.getContactData());
-        List<InternetAddress> receipients;
-            receipients = Arrays.asList(new InternetAddress("Joerg Florin <joerg@casa-blu.de>"));
+        List<InternetAddress> receipients = VCardImporter.importReceipients(job.getContactData());
+//        List<InternetAddress> receipients;
+//            receipients = Arrays.asList(new InternetAddress("Joerg Florin <joerg@casa-blu.de>"));
 
         Session session = Session.getInstance(conf.getMailServerProperties(), conf.getMailAuthenticator());
         

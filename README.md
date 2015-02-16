@@ -4,8 +4,8 @@ EasyBulkMailer is an easy-to-configure bulk mailer for single-user usage on a cl
 
 Features are:
 
-- Simple GUI
-- Command line interface
+- GUI (very simple yet)
+- Command line interface (also simple)
 - Import mail template including attachments in standard format (EML)
 - Import receipients in standard format (vCard)
 - Configuration of mail server and sending options as standard preferences (using of Java-Preferences API)
@@ -29,7 +29,7 @@ You need to configure at least mail server, user and password. On mac you can cr
 *GUI tool*
 
 - Download release jar from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
-- Start the "jar" by double click or with the command `java -jar ebm.jar`
+- Start the "jar" by double clicking the jar file or with the command `java -jar ebm.jar`
 
 *Preparation of command line tool*
 

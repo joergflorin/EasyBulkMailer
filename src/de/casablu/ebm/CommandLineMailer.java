@@ -6,7 +6,9 @@ package de.casablu.ebm;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
+import net.sourceforge.cardme.vcard.VCard;
 import de.casablu.ebm.engine.MailingEngine;
 import de.casablu.ebm.engine.MailingEngineFactory;
 import de.casablu.ebm.engine.MailingJob;
@@ -58,13 +60,14 @@ public class CommandLineMailer {
 
         private final InputStream emlFile;
 
-        private final InputStream vCardFile;
+        private final List<VCard> vCards;
 
         private CommandLineMailingJob(String pathToEmlFile,
                 String pathToVCardFile) {
             try {
                 emlFile = new FileInputStream(pathToEmlFile);
-                vCardFile = new FileInputStream(pathToVCardFile);
+                vCards = new VCardImporter().importVCards(new FileInputStream(
+                        pathToVCardFile));
             } catch (FileNotFoundException e) {
                 // TODO better error handling.
                 throw new RuntimeException(e);
@@ -77,8 +80,8 @@ public class CommandLineMailer {
         }
 
         @Override
-        public InputStream getContactData() {
-            return vCardFile;
+        public List<VCard> getRecipients() {
+            return vCards;
         }
     }
 

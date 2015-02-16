@@ -12,8 +12,9 @@ public class MailingEngineFactory {
 
     private final static MailingEngineFactory INSTANCE = new MailingEngineFactory();
 
+    // Factory pattern, get factory instance by getInstance().
     private MailingEngineFactory() {
-    };
+    }
 
     /**
      * 

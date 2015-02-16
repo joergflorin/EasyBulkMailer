@@ -12,7 +12,7 @@ Features are:
 
 The latest release can be downloaded from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
 
-Required resources/libraries:
+Required resources/libraries (included in [lib](https://github.com/joergflorin/EasyBulkMailer/tree/master/lib)):
 
 - Java runtime environment (version 8): http://www.oracle.com/technetwork/java/javase/downloads/index.html
 - Card me library (http://sourceforge.net/projects/cardme/)
@@ -20,14 +20,22 @@ Required resources/libraries:
 
 **Usage**
 
-This is just a first attempt, only the "mailing engine" is more or less implemented. Later in the progress I will add gui's
-for configuration and start and watch the mailing process, logging, error handling etc.
+This is just a first attempt, only the "mailing engine" is more or less implemented. Later in the progress I will add gui's for configuration and start and watch the mailing process, logging, error handling etc.
 
+*Perpare*
 
-Start the command line application like follows:
+- Download release jar from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
+- Download bash script from [here](https://github.com/joergflorin/EasyBulkMailer/tree/master/bash), this script is tested with Mac OS X, maybe it will run unchanged on Linux. A command script for Windows will be provided later.
+- Put both files in the same directory.
+
+*Starting*
+
+- Open shell (e.g. Mac OS X Terminal).
+- Change to the directory with the jar und bash-file.
+- Type following command
 
 ```bash
-java -classpath ebm-0.1.jar:lib/javax.mail-1.5.2.jar:lib/cardme-0.4.0.jar:lib/commons-codec-1.10.jar de.casablu.ebm.CommandLineMailer --eml=~/Test.eml --vcards=~/Contacts.vcf
+. ./ebm.sh --eml=/path-to-testxml/Test.eml --vcards=/path-to-contactsvcf/Contacts.vcf
 ```
 
 You need to configure at least mail server, user and password. On mac you can create a plist-file `~/Library/Preferences/de.casablu.pmlog.plist`like the [sample file]( https://github.com/joergflorin/EasyBulkMailer/blob/master/de.casablu.ebm.plist).

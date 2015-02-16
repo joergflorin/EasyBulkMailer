@@ -3,9 +3,6 @@
  */
 package de.casablu.ebm.engine;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +13,6 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import net.sourceforge.cardme.engine.VCardEngine;
 import net.sourceforge.cardme.vcard.VCard;
 
 /**
@@ -38,29 +34,47 @@ class DefaultMailingEngine implements MailingEngine {
             Session session = Session
                     .getInstance(conf.getMailServerProperties(),
                             conf.getMailAuthenticator());
+//            session.setDebug(true);
+//            session.setDebugOut(System.out);
 
             MimeMessage message = new MimeMessage(session, job.getMailData());
             message.setFrom(conf.getSender());
             message.setSender(conf.getSender());
 
+            int sentMessages = 0;
             for (InternetAddress receipient : receipients) {
                 System.out.println("send to " + receipient + " ...");
-                message.setRecipients(Message.RecipientType.TO,
-                        new InternetAddress[] { receipient });
-                Transport.send(message);
-                System.out.println("done");
+                try {
+                    message.setRecipients(Message.RecipientType.TO,
+                            new InternetAddress[] { receipient });
+                    Transport.send(message);
+                    System.out.println("done");
+                    sentMessages++;
+                } catch (Exception e) {
+                    e.printStackTrace(System.err);
+                    // ignore
+                    continue;
+                }
             }
+            System.out.println("Messages sent: " + sentMessages);
 
         } catch (Exception e) {
             // TODO Better Error-Handling required.
             throw new RuntimeException(e);
+        } finally {
+            try {
+                job.getMailData().close();
+            } catch (Exception e) {
+                System.err.println(e);
+                // ignore
+            }
         }
     }
 
     private List<InternetAddress> createRecipients(List<VCard> contacts) {
         List<InternetAddress> recipients = new ArrayList<InternetAddress>();
         for (VCard contact : contacts) {
-            
+
             // TODO in case of error list contact data.
             if (!contact.hasN()) {
                 System.err.println("Contact has no name.");
@@ -82,5 +96,4 @@ class DefaultMailingEngine implements MailingEngine {
         return recipients;
     }
 
- 
 }

@@ -34,37 +34,49 @@ class VCardImporter {
 
         BufferedReader vCardReader = new BufferedReader(new InputStreamReader(
                 contactData));
-        StringBuilder vCard = new StringBuilder();
-        while (true) {
-            String vCardLine;
-            try {
-                vCardLine = vCardReader.readLine();
-            } catch (IOException e) {
-                // TODO better error handling;
-                throw new RuntimeException(e);
-            }
-            if (vCardLine == null) {
-                if (vCard.length() > 0) {
-                    // TODO log
-                    System.err.println("extra lines in contacts data.");
-                }
-                // All lines read, finish read loop.
-                break;
-            }
-            vCard.append(vCardLine);
-            vCard.append('\n');
-            if ("END:VCARD".equalsIgnoreCase(vCardLine)) {
-                // vCard finished, parse and put to result.
+
+        try {
+            StringBuilder vCard = new StringBuilder();
+            while (true) {
+                String vCardLine;
                 try {
-                    vCards.add(engine.parse(vCard.toString()));
-                } catch (Exception ex) {
-                    // TODO log
-                    ex.printStackTrace(System.err);
+                    vCardLine = vCardReader.readLine();
+                } catch (IOException e) {
+                    // TODO better error handling;
+                    throw new RuntimeException(e);
                 }
-                vCard = new StringBuilder();
+                if (vCardLine == null) {
+                    if (vCard.length() > 0) {
+                        // TODO log
+                        System.err.println("extra lines in contacts data.");
+                    }
+                    // All lines read, finish read loop.
+                    break;
+                }
+                vCard.append(vCardLine);
+                vCard.append('\n');
+                if ("END:VCARD".equalsIgnoreCase(vCardLine)) {
+                    // vCard finished, parse and put to result.
+                    try {
+                        vCards.add(engine.parse(vCard.toString()));
+                    } catch (Exception ex) {
+                        // TODO log
+                        ex.printStackTrace(System.err);
+                    }
+                    vCard = new StringBuilder();
+                }
+            }
+        } finally {
+            try {
+                vCardReader.close();
+                contactData.close();
+            } catch (Exception ex) {
+                ex.printStackTrace(System.err);
+                // ignore
             }
         }
-        ;
+
+        System.out.println("Imported " + vCards.size() + " contacts.");
 
         return vCards;
     }

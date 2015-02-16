@@ -27,4 +27,4 @@ Start the command line application like follows:
 java -classpath ebm-0.1.jar:lib/javax.mail-1.5.2.jar:lib/cardme-0.4.0.jar:lib/commons-codec-1.10.jar de.casablu.ebm.CommandLineMailer --eml=~/Test.eml --vcards=/Contacts.vcf
 ```
 
-You need to configure at least mail server, user and password. On mac you can create a plist-file `~/Library/Preferences/de.casablu.pmlog.plist`like the sample file.
+You need to configure at least mail server, user and password. On mac you can create a plist-file `~/Library/Preferences/de.casablu.pmlog.plist`like the [sample file]( https://github.com/joergflorin/EasyBulkMailer/blob/master/de.casablu.ebm.plist]).

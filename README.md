@@ -10,6 +10,8 @@ Features are:
 - Configuration of mail server and sending options as standard preferences (using of Java-Preferences API)
 - Platform independent (implemented with Java 8).
 
+The latest release can be downloaded from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
+
 **Usage**
 
 This is just a first attempt, only the "mailing engine" is more or less implemented. Later in the progress I will add gui's

@@ -12,18 +12,17 @@ Features are:
 
 The latest release can be downloaded from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
 
+Required resources/libraries:
+
+- Java runtime environment (version 8): http://www.oracle.com/technetwork/java/javase/downloads/index.html
+- Card me library (http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi)
+- Apache Commons-Codec library (http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi)
+- 
 **Usage**
 
 This is just a first attempt, only the "mailing engine" is more or less implemented. Later in the progress I will add gui's
 for configuration and start and watch the mailing process, logging, error handling etc.
 
-You will need a Java runtime environment (at least version 8) (free downloadable from here: http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-
-You will also need the JavaMail API (free downloadable from here: https://java.net/projects/javamail/pages/Home).
-
-Finally you will need Card Me (free downloadable from here: http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi).
-
-First prepare by exporting an email template as eml file (e.g. Test.eml) and the contacts of the receivers as vcf file (e.g. Contacts.vcf).
 
 Start the command line application like follows:
 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>/de/casablu/ebm/</key>
+	<dict>
+		<key>SmtpHost</key>
+		<string>smtp.yourmailserver.com</string>
+		<key>MailSenderAddress</key>
+		<string>Your Name &lt;yourname@mailserver.com&gt;</string>
+		<key>UserId</key>
+		<string>Your_Mail_User_Name</string>
+		<key>Password</key>
+		<string>Your_Mail_Password</string>
+	</dict>
+</dict>
+</plist>

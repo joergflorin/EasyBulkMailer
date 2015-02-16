@@ -21,4 +21,10 @@ You will also need the JavaMail API (free downloadable from here: https://java.n
 
 Finally you will need Card Me (free downloadable from here: http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi).
 
-A more detailed usage instruction will follow...
+Start the command line application like follows:
+
+```bash
+java -classpath ebm-0.1.jar:lib/javax.mail-1.5.2.jar:lib/cardme-0.4.0.jar:lib/commons-codec-1.10.jar de.casablu.ebm.CommandLineMailer --eml=~/Test.eml --vcards=/Contacts.vcf
+```
+
+You need to configure at least mail server, user and password. On mac you can create a plist-file `~/Library/Preferences/de.casablu.pmlog.plist`like the sample file.

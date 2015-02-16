@@ -15,9 +15,9 @@ The latest release can be downloaded from [here](https://github.com/joergflorin/
 Required resources/libraries:
 
 - Java runtime environment (version 8): http://www.oracle.com/technetwork/java/javase/downloads/index.html
-- Card me library (http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi)
-- Apache Commons-Codec library (http://sourceforge.net/projects/cardme/) and Apache Commons (http://commons.apache.org/proper/commons-codec/download_codec.cgi)
-- 
+- Card me library (http://sourceforge.net/projects/cardme/)
+- Apache Commons-Codec library (http://commons.apache.org/proper/commons-codec/download_codec.cgi)
+
 **Usage**
 
 This is just a first attempt, only the "mailing engine" is more or less implemented. Later in the progress I will add gui's

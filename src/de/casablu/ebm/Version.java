@@ -5,9 +5,10 @@ package de.casablu.ebm;
 
 public class Version {
 
-    private Version() {}
-    
+    private Version() {
+    }
+
     public static String getVersionString() {
-        return "0.4";
+        return "0.4.1";
     }
 }

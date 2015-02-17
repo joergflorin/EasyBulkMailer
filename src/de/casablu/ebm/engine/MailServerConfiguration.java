@@ -12,6 +12,8 @@ import javax.mail.PasswordAuthentication;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 
+import com.sun.istack.internal.logging.Logger;
+
 import de.casablu.ebm.CommandLineMailer;
 
 /**
@@ -20,6 +22,9 @@ import de.casablu.ebm.CommandLineMailer;
  * @author Joerg Florin (git@casa-blu.de)
  */
 public class MailServerConfiguration {
+
+    private static final Logger LOGGER = Logger
+            .getLogger(MailServerConfiguration.class);
 
     private final Preferences prefs = Preferences
             .userNodeForPackage(CommandLineMailer.class);
@@ -139,6 +144,7 @@ public class MailServerConfiguration {
         try {
             return new InternetAddress(getMailSenderAddress());
         } catch (AddressException e) {
+            LOGGER.severe("Exception in creating sender Address", e);
             // TODO better Error-Handling.
             throw new RuntimeException(e);
         }

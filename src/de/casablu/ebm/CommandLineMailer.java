@@ -34,6 +34,11 @@ public class CommandLineMailer {
      *            command line params.
      */
     public static void main(String[] args) {
+        if (System.getProperty("java.util.logging.config.file") == null) {
+            System.setProperty("java.util.logging.config.class",
+                    "de.casablu.ebm.LoggingConfig");
+        }
+
         if (args.length > 2 || args.length < 1) {
             printUsageAndExit();
         }

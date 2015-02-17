@@ -13,12 +13,16 @@ import java.util.List;
 import net.sourceforge.cardme.engine.VCardEngine;
 import net.sourceforge.cardme.vcard.VCard;
 
+import com.sun.istack.internal.logging.Logger;
+
 /**
  * Imports vCards from vCard-List in InputStream.
  * 
  * @author Joerg Florin (git@casa-blu.de)
  */
 class VCardImporter {
+
+    private static Logger LOGGER = Logger.getLogger(VCardImporter.class);
 
     /**
      * Imports vCards from contactData input stream.
@@ -42,13 +46,13 @@ class VCardImporter {
                 try {
                     vCardLine = vCardReader.readLine();
                 } catch (IOException e) {
+                    LOGGER.severe("Exception in reading vCards", e);
                     // TODO better error handling;
                     throw new RuntimeException(e);
                 }
                 if (vCardLine == null) {
                     if (vCard.length() > 0) {
-                        // TODO log
-                        System.err.println("extra lines in contacts data.");
+                        LOGGER.warning("Extra lines in contacts data");
                     }
                     // All lines read, finish read loop.
                     break;
@@ -60,8 +64,7 @@ class VCardImporter {
                     try {
                         vCards.add(engine.parse(vCard.toString()));
                     } catch (Exception ex) {
-                        // TODO log
-                        ex.printStackTrace(System.err);
+                        LOGGER.warning("Exception in parsing vCard", ex);
                     }
                     vCard = new StringBuilder();
                 }
@@ -76,7 +79,7 @@ class VCardImporter {
             }
         }
 
-        System.out.println("Imported " + vCards.size() + " contacts.");
+        LOGGER.info(String.format("Imported %d contacts.", vCards.size()));
 
         return vCards;
     }

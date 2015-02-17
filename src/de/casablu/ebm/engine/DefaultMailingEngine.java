@@ -14,6 +14,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import net.sourceforge.cardme.vcard.VCard;
+
+import com.sun.istack.internal.logging.Logger;
+
 import de.casablu.ebm.Version;
 
 /**
@@ -23,15 +26,17 @@ import de.casablu.ebm.Version;
  */
 class DefaultMailingEngine implements MailingEngine {
 
+    private static Logger LOGGER = Logger.getLogger(MailingEngine.class);
+
     @Override
     public void runJob(MailingJob job) {
         try {
-            System.out.printf("Easy Bulk Mailer %s%n",
-                    Version.getVersionString());
+            LOGGER.info(String.format("Easy Bulk Mailer %s",
+                    Version.getVersionString()));
 
-            // TODO use loggin mechanism instead System.outs
             MailServerConfiguration conf = new MailServerConfiguration();
-            System.out.println("Use mail configuration:\n" + conf);
+            LOGGER.info("Use mail configuration:\n" + conf);
+
             List<InternetAddress> recipients = createRecipients(job
                     .getRecipients());
 
@@ -49,43 +54,47 @@ class DefaultMailingEngine implements MailingEngine {
 
                 int sentMessages = 0;
                 for (InternetAddress recipient : recipients) {
-                    System.out.printf("Send message %d of %d to %s ...%n",
-                            sentMessages + 1, recipients.size(), recipient);
+                    LOGGER.info(String.format(
+                            "Send message %d of %d to %s ...",
+                            sentMessages + 1, recipients.size(),
+                            recipient.toUnicodeString()));
                     try {
                         message.setRecipients(Message.RecipientType.TO,
                                 new InternetAddress[] { recipient });
                         Transport.send(message);
-                        System.out.println("done");
+                        LOGGER.info("done");
                         sentMessages++;
                     } catch (Exception e) {
-                        System.out.printf("Sending of message to %s failed.%n",
-                                recipient);
-                        e.printStackTrace(System.err);
+                        LOGGER.warning(String.format(
+                                "Sending of message to %s failed.",
+                                recipient.toUnicodeString()), e);
                         // ignore
                         continue;
                     }
                 }
-                System.out
-                        .printf("Totally %d of %d messages sent, %d messages failed.%n",
-                                sentMessages, recipients.size(),
-                                recipients.size() - sentMessages);
+                LOGGER.info(String.format(
+                        "Totally %d of %d messages sent, %d messages failed.",
+                        sentMessages, recipients.size(), recipients.size()
+                                - sentMessages));
             } else {
-                System.out
-                        .println("No mail template selected, dry-run: List contacts/recipients");
+                LOGGER.warning(String
+                        .format("No mail template selected, dry-run: List contacts/recipients"));
                 int counter = 0;
                 for (VCard contact : job.getRecipients()) {
-                    System.out.printf("Contact %d of %d: %s%n", ++counter,
-                            recipients.size(), contact.toString());
+                    LOGGER.info(String.format("Contact %d of %d: %s",
+                            ++counter, recipients.size(), contact.toString()));
                 }
                 counter = 0;
                 for (InternetAddress recipient : recipients) {
-                    System.out.printf("Recipent %d of %d: %s%n", ++counter,
-                            recipients.size(), recipient);
+                    LOGGER.info(String.format("Recipent %d of %d: %s",
+                            ++counter, recipients.size(),
+                            recipient.toUnicodeString()));
                 }
-                System.out.println("Listing done.");
+                LOGGER.info("Listing done.");
             }
 
         } catch (Exception e) {
+            LOGGER.severe("Exception in mailing engine", e);
             // TODO Better Error-Handling required.
             throw new RuntimeException(e);
         } finally {
@@ -94,8 +103,7 @@ class DefaultMailingEngine implements MailingEngine {
                     job.getMailData().close();
                 }
             } catch (Exception e) {
-                e.printStackTrace(System.err);
-                // ignore
+                LOGGER.severe("Exception in closing maildata", e);
             }
         }
     }
@@ -106,11 +114,11 @@ class DefaultMailingEngine implements MailingEngine {
 
             // TODO in case of error list contact data.
             if (!contact.hasN()) {
-                System.err.println("Contact has no name.");
+                LOGGER.warning("Contact has no name.");
                 continue;
             }
             if (!contact.hasEmails()) {
-                System.err.println("Contact has no email addresses.");
+                LOGGER.warning("Contact has no email addresses.");
                 continue;
             }
             String name = contact.getFN().getFormattedName();
@@ -122,8 +130,8 @@ class DefaultMailingEngine implements MailingEngine {
                 continue;
             }
         }
-        System.out.printf("%d recipients found, %d contacts failed.%n",
-                recipients.size(), contacts.size() - recipients.size());
+        LOGGER.info(String.format("%d recipients found, %d contacts failed.",
+                recipients.size(), contacts.size() - recipients.size()));
         return recipients;
     }
 

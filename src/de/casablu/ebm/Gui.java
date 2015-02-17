@@ -30,6 +30,11 @@ public class Gui {
             InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
 
+        if (System.getProperty("java.util.logging.config.file") == null) {
+            System.setProperty("java.util.logging.config.class",
+                    "de.casablu.ebm.LoggingConfig");
+        }
+
         // Set System L&F
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 

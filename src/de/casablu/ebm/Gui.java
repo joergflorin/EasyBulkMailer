@@ -3,6 +3,8 @@
  */
 package de.casablu.ebm;
 
+import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,6 +19,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.filechooser.FileFilter;
 
 import net.sourceforge.cardme.vcard.VCard;
+import de.casablu.ebm.engine.MailServerConfiguration;
 import de.casablu.ebm.engine.MailingEngine;
 import de.casablu.ebm.engine.MailingEngineFactory;
 import de.casablu.ebm.engine.MailingJob;
@@ -34,6 +37,16 @@ public class Gui {
 
             @Override
             public void run() {
+
+                // Check if Mailserver is configured.
+                String smtpHost = new MailServerConfiguration().getSmtpHost();
+                if (smtpHost == null
+                        || smtpHost.isEmpty()
+                        || Toolkit.getDefaultToolkit().getLockingKeyState(
+                                KeyEvent.VK_CAPS_LOCK)) {
+                    // Open Configuration Dialog.
+                    new MailServerConfigDialog();
+                }
 
                 // Open ConsoleWindow.
                 new ConsoleWindow();
@@ -56,8 +69,9 @@ public class Gui {
                     }
 
                 });
-                fileChooser
-                        .setDialogTitle("EasyBulkMailer: Select Mail Template (EML)");
+                fileChooser.setDialogTitle(String.format(
+                        "EasyBulkMailer %s: Select Mail Template (EML)",
+                        Version.getVersionString()));
                 fileChooser.setMultiSelectionEnabled(false);
                 int result = fileChooser.showOpenDialog(null);
                 File emlFile;
@@ -90,8 +104,9 @@ public class Gui {
                     }
 
                 });
-                fileChooser
-                        .setDialogTitle("EasyBulkMailer: Select Contacts file (vCard)");
+                fileChooser.setDialogTitle(String.format(
+                        "EasyBulkMailer %s: Select Contacts file (vCard)",
+                        Version.getVersionString()));
                 fileChooser.setMultiSelectionEnabled(false);
                 result = fileChooser.showOpenDialog(null);
                 File vcardFile = fileChooser.getSelectedFile();

@@ -4,6 +4,7 @@
 package de.casablu.ebm.engine;
 
 import java.util.Properties;
+import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import javax.mail.Authenticator;
@@ -18,7 +19,7 @@ import de.casablu.ebm.CommandLineMailer;
  * 
  * @author Joerg Florin (git@casa-blu.de)
  */
-class MailServerConfiguration {
+public class MailServerConfiguration {
 
     private final Preferences prefs = Preferences
             .userNodeForPackage(CommandLineMailer.class);
@@ -27,15 +28,15 @@ class MailServerConfiguration {
 
     private static final String SMTP_PORT_PREF = "SmtpPort";
 
-    private static final String SOCKET_FACTORY_CLASS = "SocketFactoryClass";
+    private static final String SOCKET_FACTORY_CLASS_PREF = "SocketFactoryClass";
 
-    private static final String SMTP_AUTH = "SmtpAuth";
+    private static final String SMTP_AUTH_PREF = "SmtpAuth";
 
-    private static final String USER_ID = "UserId";
+    private static final String SMTP_USER_ID_PREF = "UserId";
 
-    private static final String PASSWORD = "Password";
+    private static final String SMTP_PASSWORD_PREF = "Password";
 
-    private static final String MAIL_SENDER_ADDRESS = "MailSenderAddress";
+    private static final String MAIL_SENDER_ADDRESS_PREF = "MailSenderAddress";
 
     /**
      * @return Properties for the mail server.
@@ -43,15 +44,79 @@ class MailServerConfiguration {
     Properties getMailServerProperties() {
         Properties props = new Properties();
 
-        props.put("mail.smtp.host", prefs.get(SMTP_HOST_PREF, ""));
+        props.put("mail.smtp.host", getSmtpHost());
         props.put("mail.smtp.socketFactory.port",
-                prefs.get(SMTP_PORT_PREF, "465"));
-        props.put("mail.smtp.socketFactory.class", prefs.get(
-                SOCKET_FACTORY_CLASS, "javax.net.ssl.SSLSocketFactory"));
-        props.put("mail.smtp.auth", prefs.get(SMTP_AUTH, "true"));
-        props.put("mail.smtp.port", prefs.get(SMTP_PORT_PREF, "465"));
+                Integer.toString(getSmtpPort()));
+        props.put("mail.smtp.socketFactory.class", getSslSocketFactory());
+        props.put("mail.smtp.auth", Boolean.toString(getSmtpAuth()));
+        props.put("mail.smtp.port", getSmtpPort());
 
         return props;
+    }
+
+    public boolean getSmtpAuth() {
+        return prefs.getBoolean(SMTP_AUTH_PREF, true);
+    }
+
+    public void setSmtpAuth(boolean smtpAuth) {
+        prefs.putBoolean(SMTP_AUTH_PREF, smtpAuth);
+    }
+
+    public String getSslSocketFactory() {
+        return prefs.get(SOCKET_FACTORY_CLASS_PREF,
+                "javax.net.ssl.SSLSocketFactory");
+    }
+
+    public void setSslSocketFactory(String sslSocketFactory) {
+        prefs.put(SOCKET_FACTORY_CLASS_PREF, sslSocketFactory);
+    }
+
+    public int getSmtpPort() {
+        return prefs.getInt(SMTP_PORT_PREF, 465);
+    }
+
+    public void setSmtpPort(int smtpPort) {
+        prefs.putInt(SMTP_PORT_PREF, smtpPort);
+    }
+
+    public String getSmtpHost() {
+        return prefs.get(SMTP_HOST_PREF, "");
+    }
+
+    public void setSmtpHost(String smtpHost) {
+        prefs.put(SMTP_HOST_PREF, smtpHost);
+    }
+
+    public String getSmtpUserId() {
+        return prefs.get(SMTP_USER_ID_PREF, "");
+    }
+
+    public void setSmtpUserId(String smtpUserId) {
+        prefs.put(SMTP_USER_ID_PREF, smtpUserId);
+    }
+
+    public String getSmtpPassword() {
+        return prefs.get(SMTP_PASSWORD_PREF, "");
+    }
+
+    public void setSmtpPassword(String smtpPassword) {
+        prefs.put(SMTP_PASSWORD_PREF, smtpPassword);
+    }
+
+    public String getMailSenderAddress() {
+        return prefs.get(MAIL_SENDER_ADDRESS_PREF, "");
+    }
+
+    public void setMailSenderAddress(String mailSenderAddress) {
+        prefs.put(MAIL_SENDER_ADDRESS_PREF, mailSenderAddress);
+    }
+
+    public void flushPrefs() {
+        try {
+            prefs.flush();
+        } catch (BackingStoreException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -60,9 +125,10 @@ class MailServerConfiguration {
     Authenticator getMailAuthenticator() {
         return new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(prefs.get(USER_ID, ""),
-                        prefs.get(PASSWORD, ""));
+                return new PasswordAuthentication(getSmtpUserId(),
+                        getSmtpPassword());
             }
+
         };
     }
 
@@ -71,7 +137,7 @@ class MailServerConfiguration {
      */
     InternetAddress getSender() {
         try {
-            return new InternetAddress(prefs.get(MAIL_SENDER_ADDRESS, ""));
+            return new InternetAddress(getMailSenderAddress());
         } catch (AddressException e) {
             // TODO better Error-Handling.
             throw new RuntimeException(e);
@@ -84,7 +150,7 @@ class MailServerConfiguration {
         builder.append('\n');
         builder.append("sender=" + getSender());
         builder.append('\n');
-        builder.append("mail_user_id=" + prefs.get(USER_ID, ""));
+        builder.append("mail_user_id=" + prefs.get(SMTP_USER_ID_PREF, ""));
         builder.append('\n');
         return builder.toString();
     }

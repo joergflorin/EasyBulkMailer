@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import net.sourceforge.cardme.vcard.VCard;
+import de.casablu.ebm.engine.MailServerConfiguration;
 import de.casablu.ebm.engine.MailingEngine;
 import de.casablu.ebm.engine.MailingEngineFactory;
 import de.casablu.ebm.engine.MailingJob;
@@ -49,6 +50,13 @@ public class CommandLineMailer {
 
         if (pathToVCardFile == null) {
             printUsageAndExit();
+        }
+
+        // Check if Mailserver is configured.
+        String smtpHost = new MailServerConfiguration().getSmtpHost();
+        if (smtpHost == null || smtpHost.isEmpty()) {
+            System.err.println("MailServer not configured.");
+            System.exit(-1);
         }
 
         MailingEngine engine = MailingEngineFactory.getInstance()

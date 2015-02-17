@@ -20,8 +20,9 @@ import javax.swing.JTextArea;
 class ConsoleWindow extends JFrame {
 
     ConsoleWindow() {
-        setTitle("Easy Bulk Mailer Console");
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setTitle(String.format("Easy Bulk Mailer %s Console",
+                Version.getVersionString()));
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
 
         JTextArea consoleArea = new JTextArea();
 

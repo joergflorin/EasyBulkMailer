@@ -14,6 +14,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import net.sourceforge.cardme.vcard.VCard;
+import de.casablu.ebm.Version;
 
 /**
  * Default Implementation of a MailingEngine.
@@ -25,6 +26,9 @@ class DefaultMailingEngine implements MailingEngine {
     @Override
     public void runJob(MailingJob job) {
         try {
+            System.out.printf("Easy Bulk Mailer %s%n",
+                    Version.getVersionString());
+
             // TODO use loggin mechanism instead System.outs
             MailServerConfiguration conf = new MailServerConfiguration();
             System.out.println("Use mail configuration:\n" + conf);

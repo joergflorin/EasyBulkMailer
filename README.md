@@ -32,9 +32,9 @@ You need to configure at least mail server, user and password. On mac you can cr
 - Download release jar from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
 - Start the "jar" by double clicking the jar file or with the command `java -jar ebm.jar`
 
-The activities are logged to the console window. You will find information about how many contacts are found and how many and what messages are successfully sent or not.
+The activities of the bulk mailer are logged to the console window. You will find information about how many contacts are found and how many and what messages are successfully sent or not. For saving the log you have to copy the contents into an editor window and save it with the editor.
 
-You may do a dry-run with just analyzing the contacts by click "Cancel" on the selection dialog for the EML file. The contacts (vcards) and the recipients (name, email address) will be listed on the console window.
+You may do a dry-run with just analyzing the contacts by clicking "Cancel" on the selection dialog for the EML file. The contacts (vcards) and the recipients (name, email address) will be listed on the console window.
 
 *Preparation of command line tool*
 
@@ -55,4 +55,4 @@ You may do a dry-run with just analyzing the contacts by click "Cancel" on the s
 The activities are logged to stdout. You will find information about how many contacts are found and how many and what messages are successfully sent or not.
 
 The --eml argument is optional. If not set, only the contacts will be analyzed and listed
-like in the gui tool (see above).
+like the gui tool does (see above).

@@ -23,7 +23,7 @@ EasyBulkMailer uses following third party libraries (included in [lib](https://g
 
 **Usage**
 
-This is just a first attempt, only the "mailing engine" is more or less implemented. You can start a very simple gui tool or use a command line tool. Later in the progress I will add a more complex gui with contacts preview start, interrupt and checkpoint/restart features.
+This is just a first attempt, only the "mailing engine" is more or less implemented. You can start a very simple gui tool or use a command line tool. Later in the progress I will add a more complex gui with contacts preview, start, interrupt and checkpoint/restart features.
 
 *Configuration*
 

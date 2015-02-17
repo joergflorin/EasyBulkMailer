@@ -13,9 +13,10 @@ Features are:
 
 The latest release can be downloaded from [here](https://github.com/joergflorin/EasyBulkMailer/releases).
 
-Required resources/libraries (included in [lib](https://github.com/joergflorin/EasyBulkMailer/tree/master/lib)):
+*EasyBulkMailer needs an installed Java 8 runtime. You find the newest Java 8 runtime for your machine here: http://www.oracle.com/technetwork/java/javase/downloads/index.html*
 
-- Java runtime environment (version 8): http://www.oracle.com/technetwork/java/javase/downloads/index.html
+EasyBulkMailer uses following third party libraries (included in [lib](https://github.com/joergflorin/EasyBulkMailer/tree/master/lib)). The libraries are included in the [Release jar](https://github.com/joergflorin/EasyBulkMailer/releases) and not have to be downloaded seperately:
+
 - JavaMail API (https://java.net/projects/javamail/pages/Home).
 - Card me library (http://sourceforge.net/projects/cardme/)
 - Apache Commons-Codec library (http://commons.apache.org/proper/commons-codec/download_codec.cgi)

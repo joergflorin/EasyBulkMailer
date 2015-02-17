@@ -28,44 +28,69 @@ class DefaultMailingEngine implements MailingEngine {
             // TODO use loggin mechanism instead System.outs
             MailServerConfiguration conf = new MailServerConfiguration();
             System.out.println("Use mail configuration:\n" + conf);
-            List<InternetAddress> receipients = createRecipients(job
+            List<InternetAddress> recipients = createRecipients(job
                     .getRecipients());
 
             Session session = Session
                     .getInstance(conf.getMailServerProperties(),
                             conf.getMailAuthenticator());
-//            session.setDebug(true);
-//            session.setDebugOut(System.out);
+            // session.setDebug(true);
+            // session.setDebugOut(System.out);
 
-            MimeMessage message = new MimeMessage(session, job.getMailData());
-            message.setFrom(conf.getSender());
-            message.setSender(conf.getSender());
+            if (job.getMailData() != null) {
+                MimeMessage message = new MimeMessage(session,
+                        job.getMailData());
+                message.setFrom(conf.getSender());
+                message.setSender(conf.getSender());
 
-            int sentMessages = 0;
-            for (InternetAddress receipient : receipients) {
-                System.out.println("send to " + receipient + " ...");
-                try {
-                    message.setRecipients(Message.RecipientType.TO,
-                            new InternetAddress[] { receipient });
-                    Transport.send(message);
-                    System.out.println("done");
-                    sentMessages++;
-                } catch (Exception e) {
-                    e.printStackTrace(System.err);
-                    // ignore
-                    continue;
+                int sentMessages = 0;
+                for (InternetAddress recipient : recipients) {
+                    System.out.printf("Send message %d of %d to %s ...%n",
+                            sentMessages + 1, recipients.size(), recipient);
+                    try {
+                        message.setRecipients(Message.RecipientType.TO,
+                                new InternetAddress[] { recipient });
+                        Transport.send(message);
+                        System.out.println("done");
+                        sentMessages++;
+                    } catch (Exception e) {
+                        System.out.printf("Sending of message to %s failed.%n",
+                                recipient);
+                        e.printStackTrace(System.err);
+                        // ignore
+                        continue;
+                    }
                 }
+                System.out
+                        .printf("Totally %d of %d messages sent, %d messages failed.%n",
+                                sentMessages, recipients.size(),
+                                recipients.size() - sentMessages);
+            } else {
+                System.out
+                        .println("No mail template selected, dry-run: List contacts/recipients");
+                int counter = 0;
+                for (VCard contact : job.getRecipients()) {
+                    System.out.printf("Contact %d of %d: %s%n", ++counter,
+                            recipients.size(), contact.toString());
+                }
+                counter = 0;
+                for (InternetAddress recipient : recipients) {
+                    System.out.printf("Recipent %d of %d: %s%n", ++counter,
+                            recipients.size(), recipient);
+                }
+                System.out.println("Listing done.");
             }
-            System.out.println("Messages sent: " + sentMessages);
 
         } catch (Exception e) {
             // TODO Better Error-Handling required.
             throw new RuntimeException(e);
         } finally {
             try {
-                job.getMailData().close();
+                if (job.getMailData() != null) {
+                    job.getMailData().close();
+                }
             } catch (Exception e) {
-                System.err.println(e);
+                e.printStackTrace(System.err);
                 // ignore
             }
         }
@@ -93,6 +118,8 @@ class DefaultMailingEngine implements MailingEngine {
                 continue;
             }
         }
+        System.out.printf("%d recipients found, %d contacts failed.%n",
+                recipients.size(), contacts.size() - recipients.size());
         return recipients;
     }
 

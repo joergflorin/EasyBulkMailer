@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.util.List;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -43,8 +44,10 @@ public class Gui {
 
                     @Override
                     public boolean accept(File f) {
-                        return f.isDirectory() || f.getName().endsWith(".eml")
-                                || f.getName().endsWith(".EML");
+                        return f.isDirectory()
+                                || f.isFile()
+                                && (f.getName().endsWith(".eml") || f.getName()
+                                        .endsWith(".EML"));
                     }
 
                     @Override
@@ -57,10 +60,17 @@ public class Gui {
                         .setDialogTitle("EasyBulkMailer: Select Mail Template (EML)");
                 fileChooser.setMultiSelectionEnabled(false);
                 int result = fileChooser.showOpenDialog(null);
-                File emlFile = fileChooser.getSelectedFile();
-                if (result != JFileChooser.APPROVE_OPTION || emlFile == null) {
-                    // User cancelled.
-                    System.exit(0);
+                File emlFile;
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    emlFile = fileChooser.getSelectedFile();
+                } else {
+                    emlFile = null;
+                    JOptionPane
+                            .showMessageDialog(
+                                    null,
+                                    "No EML-file selected, will just analyse vCards (dry-run).",
+                                    "EasyBulMailer: No EML file selected",
+                                    JOptionPane.WARNING_MESSAGE);
                 }
 
                 // Open FileDialog for vcard files.
@@ -68,8 +78,10 @@ public class Gui {
 
                     @Override
                     public boolean accept(File f) {
-                        return f.isFile() && f.getName().endsWith(".vcf")
-                                || f.getName().endsWith(".VCF");
+                        return f.isDirectory()
+                                || f.isFile()
+                                && (f.getName().endsWith(".vcf") || f.getName()
+                                        .endsWith(".VCF"));
                     }
 
                     @Override
@@ -112,7 +124,11 @@ public class Gui {
 
         private GuiMailingJob(File emlFile, File vCardFile) {
             try {
-                this.emlFile = new FileInputStream(emlFile);
+                if (emlFile != null) {
+                    this.emlFile = new FileInputStream(emlFile);
+                } else {
+                    this.emlFile = null;
+                }
                 vCards = new VCardImporter().importVCards(new FileInputStream(
                         vCardFile));
             } catch (FileNotFoundException e) {

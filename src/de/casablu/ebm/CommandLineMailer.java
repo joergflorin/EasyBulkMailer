@@ -33,7 +33,7 @@ public class CommandLineMailer {
      *            command line params.
      */
     public static void main(String[] args) {
-        if (args.length != 2) {
+        if (args.length > 2 || args.length < 1) {
             printUsageAndExit();
         }
         String pathToEmlFile = null;
@@ -47,7 +47,7 @@ public class CommandLineMailer {
             }
         }
 
-        if (pathToEmlFile == null || pathToVCardFile == null) {
+        if (pathToVCardFile == null) {
             printUsageAndExit();
         }
 
@@ -65,7 +65,11 @@ public class CommandLineMailer {
         private CommandLineMailingJob(String pathToEmlFile,
                 String pathToVCardFile) {
             try {
-                emlFile = new FileInputStream(pathToEmlFile);
+                if (pathToEmlFile != null) {
+                    emlFile = new FileInputStream(pathToEmlFile);
+                } else {
+                    emlFile = null;
+                }
                 vCards = new VCardImporter().importVCards(new FileInputStream(
                         pathToVCardFile));
             } catch (FileNotFoundException e) {
@@ -88,6 +92,8 @@ public class CommandLineMailer {
     private static void printUsageAndExit() {
         System.err
                 .println("usage: --eml={path-to-eml-file<} --vcards={path-to-vcard-file}");
+        System.err
+                .println("--eml option is optional, if ommitted, just vcards are analyzed.");
         System.exit(-1);
     }
 }

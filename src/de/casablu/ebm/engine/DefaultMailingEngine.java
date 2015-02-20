@@ -112,19 +112,29 @@ class DefaultMailingEngine implements MailingEngine {
         List<InternetAddress> recipients = new ArrayList<InternetAddress>();
         for (VCard contact : contacts) {
 
-            // TODO in case of error list contact data.
-            if (!contact.hasN()) {
-                LOGGER.warning("Contact has no name.");
+            String name = null;
+            String emailAddress = null;
+
+            // check if contact has email address.
+            if (contact.hasEmails() && contact.getEmails().size() > 0) {
+                emailAddress = contact.getEmails().get(0).getEmail();
+            } else {
+                LOGGER.warning(String.format(
+                        "Contact has no email address: %s", contact));
                 continue;
             }
-            if (!contact.hasEmails()) {
-                LOGGER.warning("Contact has no email addresses.");
-                continue;
+
+            // if no formatted name is present, don't use any name.
+            if (contact.hasFN()) {
+                name = contact.getFN().getFormattedName();
+            } else {
+                LOGGER.info(String.format("Contact has no formatted name: %s",
+                        contact));
             }
-            String name = contact.getFN().getFormattedName();
-            String emailAddress = contact.getEmails().get(0).getEmail();
+
             try {
-                recipients.add(new InternetAddress(emailAddress, name));
+                recipients.add(name == null ? new InternetAddress(emailAddress,
+                        "") : new InternetAddress(emailAddress, name));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace(System.err);
                 continue;
